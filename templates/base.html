@@ -1,0 +1,86 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ title or "Luxury HMS" }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+
+{% if current_user.get("user_id") %}
+<div class="app-layout">
+
+    <aside class="sidebar">
+        <div class="brand-box">
+            <div class="brand-logo">H</div>
+            <div>
+                <h2>HMS</h2>
+                <p>Luxury Hotel Suite</p>
+            </div>
+        </div>
+
+        <div class="user-pill">
+            <span>👤</span>
+            <div>
+                <strong>{{ current_user.username }}</strong>
+                <small>{{ current_user.role }}</small>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="{{ url_for('dashboard') }}">📊 <span>Dashboard</span></a>
+            <a href="{{ url_for('rooms') }}">🏨 <span>Rooms</span></a>
+            <a href="{{ url_for('customers') }}">👥 <span>Customers</span></a>
+            <a href="{{ url_for('bookings') }}">📅 <span>Bookings</span></a>
+            <a href="{{ url_for('inventory') }}">📦 <span>Inventory</span></a>
+            <a href="{{ url_for('service') }}">🍽 <span>Restaurant / Service</span></a>
+            <a href="{{ url_for('billing') }}">💳 <span>Billing</span></a>
+            <a href="{{ url_for('reports') }}">📈 <span>Reports</span></a>
+
+            {% if current_user.role in ["Admin", "Manager"] %}
+            <a href="{{ url_for('employees') }}">🧑‍💼 <span>Employees</span></a>
+            <a href="{{ url_for('users') }}">🔐 <span>Users / Roles</span></a>
+            {% endif %}
+
+            <a href="{{ url_for('logout') }}" class="logout-link">🚪 <span>Logout</span></a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <h1>{{ title or "Hotel Management System" }}</h1>
+                <p>Manage rooms, bookings, inventory, billing and reports</p>
+            </div>
+            <div class="topbar-badge">
+                ✨ Premium Dashboard
+            </div>
+        </header>
+{% endif %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="message-area">
+            {% for category, msg in messages %}
+            <div class="custom-alert alert-{{ category }}">
+                {{ msg }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+
+{% if current_user.get("user_id") %}
+    </main>
+</div>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+Fixed version:
+- Service page now shows clear message when no active booking exists.
+- Billing page now shows clear message when no active booking exists.
+- Added validation for missing booking/item/quantity.
+- Added validation for booking creation.
+- Added validation for checkout discount.
+- Prevents confusing crashes when dropdowns are empty.
+
+Correct workflow:
+1. Add Customer
+2. Create Booking using available room
+3. Add Restaurant / Room Service
+4. Billing / Checkout
+5. Print Invoice

@@ -1,0 +1,139 @@
+
+{% extends "base.html" %}
+{% set title = "Dashboard" %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div>
+        <h2>Welcome back, {{ current_user.username }} 👋</h2>
+        <p>Your hotel operations overview is ready.</p>
+    </div>
+    <div class="hero-metric">
+        <span>Total Revenue</span>
+        <strong>₹{{ "%.2f"|format(stats.revenue) }}</strong>
+    </div>
+</section>
+
+<div class="stats-grid">
+    <div class="stat-card gradient-blue">
+        <div class="stat-icon">🏨</div>
+        <span>Total Rooms</span>
+        <h3>{{ stats.total_rooms }}</h3>
+    </div>
+
+    <div class="stat-card gradient-green">
+        <div class="stat-icon">🟢</div>
+        <span>Available Rooms</span>
+        <h3>{{ stats.available }}</h3>
+    </div>
+
+    <div class="stat-card gradient-red">
+        <div class="stat-icon">🔴</div>
+        <span>Occupied Rooms</span>
+        <h3>{{ stats.occupied }}</h3>
+    </div>
+
+    <div class="stat-card gradient-purple">
+        <div class="stat-icon">📅</div>
+        <span>Active Bookings</span>
+        <h3>{{ stats.active_bookings }}</h3>
+    </div>
+
+    <div class="stat-card gradient-gold">
+        <div class="stat-icon">🧑‍💼</div>
+        <span>Employees</span>
+        <h3>{{ stats.employees }}</h3>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+
+    <div class="glass-panel">
+        <div class="panel-header">
+            <h3>Room Status</h3>
+            <span>Live overview</span>
+        </div>
+
+        <div class="status-list">
+            {% for r in room_status %}
+            <div class="status-row">
+                <span class="status-name">{{ r.status }}</span>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: {{ (r.count / stats.total_rooms * 100) if stats.total_rooms else 0 }}%;"></div>
+                </div>
+                <strong>{{ r.count }}</strong>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="glass-panel">
+        <div class="panel-header">
+            <h3>Low Stock Alert</h3>
+            <span>Inventory warning</span>
+        </div>
+
+        {% if low_stock %}
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Reorder</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in low_stock %}
+                <tr>
+                    <td>{{ i.item_name }}</td>
+                    <td><span class="badge-danger">{{ i.quantity }}</span></td>
+                    <td>{{ i.reorder_level }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            ✅ No low stock items.
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<div class="glass-panel mt-3">
+    <div class="panel-header">
+        <h3>Recent Bookings</h3>
+        <span>Latest guest activity</span>
+    </div>
+
+    <table class="modern-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Room</th>
+                <th>Check-in</th>
+                <th>Checkout</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in recent_bookings %}
+            <tr>
+                <td>#{{ b.id }}</td>
+                <td>{{ b.name }}</td>
+                <td>{{ b.room_no }} {{ b.category }}</td>
+                <td>{{ b.checkin }}</td>
+                <td>{{ b.checkout }}</td>
+                <td>
+                    <span class="status-badge">{{ b.status }}</span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

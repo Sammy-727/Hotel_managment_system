@@ -1,0 +1,40 @@
+{% extends "base.html" %}{% block content %}
+<h1>Restaurant / Room Service</h1>
+
+{% if not bookings %}
+<div class="panel">
+  <h3>No active bookings found</h3>
+  <p>You must create a booking first before adding room service.</p>
+  <a class="button" href="{{ url_for('customers') }}">Add Customer</a>
+  <a class="button" href="{{ url_for('bookings') }}">Create Booking</a>
+</div>
+{% else %}
+<div class="panel">
+<form class="row" method="post">
+<select name="booking_id" required>
+<option value="">Select Active Booking</option>
+{% for b in bookings %}
+<option value="{{b.id}}">Booking {{b.id}} - {{b.name}} - Room {{b.room_no}}</option>
+{% endfor %}
+</select>
+<select name="item_id" required>
+<option value="">Select Item</option>
+{% for i in items %}
+<option value="{{i.id}}">{{i.item_name}} - Stock {{i.quantity}} - ₹{{i.price}}</option>
+{% endfor %}
+</select>
+<input name="quantity" type="number" min="1" placeholder="Qty" required>
+<button>Add Service</button>
+</form>
+</div>
+{% endif %}
+
+<div class="panel">
+<table>
+<tr><th>ID</th><th>Booking</th><th>Item</th><th>Qty</th><th>Amount</th><th>Date</th></tr>
+{% for u in usage %}
+<tr><td>{{u.id}}</td><td>{{u.booking_id}}</td><td>{{u.item_name}}</td><td>{{u.quantity}}</td><td>₹{{u.amount}}</td><td>{{u.usage_date}}</td></tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}

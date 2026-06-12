@@ -1,0 +1,5 @@
+
+{% extends "base.html" %}{% block content %}<h1>Customer Management</h1>
+<div class="panel"><form class="row" method="post" action="{{url_for('add_customer')}}"><input name="name" placeholder="Name" required><input name="phone" placeholder="Phone" required><input name="email" placeholder="Email"><input name="id_proof" placeholder="ID Proof"><input name="address" placeholder="Address"><button>Add</button></form></div>
+<form class="search"><input name="q" value="{{q}}" placeholder="Search customers"><button>Search</button></form>
+<div class="panel"><table><tr><th>ID</th><th>Name</th><th>Phone</th><th>Email</th><th>ID</th><th>Address</th><th>Action</th></tr>{% for c in customers %}<tr><form method="post" action="{{url_for('update_customer', id=c.id)}}"><td>{{c.id}}</td><td><input name="name" value="{{c.name}}"></td><td><input name="phone" value="{{c.phone}}"></td><td><input name="email" value="{{c.email or ''}}"></td><td><input name="id_proof" value="{{c.id_proof or ''}}"></td><td><input name="address" value="{{c.address or ''}}"></td><td><button>Save</button></td></form></tr>{% endfor %}</table></div>{% endblock %}
